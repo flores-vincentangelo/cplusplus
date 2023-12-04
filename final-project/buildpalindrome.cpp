@@ -18,32 +18,51 @@ string buildPalindrome(string a, string b) {
 
     int lengthA = a.size();
     int lengthB = b.size();
-    string longestPalindrome = "-1";
+    string longestPalindrome = "";
     string testPalindrome = "";
     bool willContinue = true;
     
-    for (size_t i = 0; i < lengthA; i++)
+    for (size_t i = 0; i <= lengthA; i++)
     {
-        for (size_t j = 0; j < lengthB; j++)
+        for (size_t j = 0; j <= lengthA; j++)
         {
-            testPalindrome = a.substr(0,i) + b.substr(0,j);
+            for (size_t k = 0; k <= lengthB; k++)
+            {
+                for (size_t l = 0; l <= lengthB; l++)
+                {
+                    string aSubString = a.substr(i,j);
+                    string bSubString = b.substr(k,l);
+                    if(aSubString.size() == 0 || bSubString.size() == 0)
+                        continue;
+                    testPalindrome = aSubString + bSubString;
+                    int testPalindromeLength = testPalindrome.size();
+                    bool isPalindrome = true;
 
-            int k = 0;
-            // do
-            // {
-            //     if(testPalindrome[k] == testPalindrome[testPalindrome.size() - k])
-            //     else
-            //         willContinue = false;
-            // } while (willContinue);
-            
+                    for (size_t m = 0; m <= testPalindromeLength; m++)
+                    {
+                        if(testPalindrome[m] != testPalindrome[testPalindromeLength - m -1] && testPalindromeLength != 0)
+                        {
+                            isPalindrome = false;
+                            break;
+                        }
 
+                    }
+
+                    if(isPalindrome)
+                    {
+                        if(longestPalindrome.size() < testPalindrome.size())
+                        {
+                            longestPalindrome = testPalindrome;
+                        }
+                    } 
+                }   
+            }
         }
-        
     }
     
-
-    string output;
-    return output;
+    if(longestPalindrome.size() == 0)
+        longestPalindrome = "-1";
+    return longestPalindrome;
 }
 
 int main()
@@ -54,7 +73,6 @@ int main()
     getline(cin, t_temp);
 
     int t = stoi(ltrim(rtrim(t_temp)));
-
     for (int t_itr = 0; t_itr < t; t_itr++) {
         string a;
         getline(cin, a);
@@ -63,7 +81,6 @@ int main()
         getline(cin, b);
 
         string result = buildPalindrome(a, b);
-
         fout << result << "\n";
     }
 
