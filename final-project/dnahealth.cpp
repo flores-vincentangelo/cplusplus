@@ -5,7 +5,31 @@ using namespace std;
 string ltrim(const string &);
 string rtrim(const string &);
 vector<string> split(const string &);
+int calcTotalHealth(vector<string>, vector<int>, int, int, string);
 
+int calcTotalHealth(vector<string> genes, vector<int> health, int first, int last, string d)
+{
+    int healthTotal = 0;
+    for (size_t i = 0; i <= d.size(); i++)
+    {
+        for (size_t j = 0; j <= d.size()-i; j++)
+        {
+            string dSubString = d.substr(i,j);
+            if(dSubString.size() == 0)
+                continue;
+            
+            for (size_t k = first; k <= last; k++)
+            {
+                if(genes[k] == dSubString)
+                    healthTotal+= health[k];
+            }
+            
+        }
+        
+    }
+    
+    return healthTotal;
+}
 
 
 int main()
@@ -45,6 +69,8 @@ int main()
     getline(cin, s_temp);
 
     int s = stoi(ltrim(rtrim(s_temp)));
+    int lowestHealth = 0;
+    int highestHealth = 0;
 
     for (int s_itr = 0; s_itr < s; s_itr++) {
         string first_multiple_input_temp;
@@ -57,8 +83,18 @@ int main()
         int last = stoi(first_multiple_input[1]);
 
         string d = first_multiple_input[2];
+
+        int healthValue = calcTotalHealth(genes, health, first, last, d);
+        if(s_itr == 0)
+        {
+            lowestHealth = healthValue;
+            highestHealth = healthValue;
+        }
+        highestHealth = healthValue > highestHealth ? healthValue : highestHealth;
+        lowestHealth = healthValue < lowestHealth ? healthValue : lowestHealth;
     }
 
+    cout << lowestHealth << " " << highestHealth << "\n";
     return 0;
 }
 
