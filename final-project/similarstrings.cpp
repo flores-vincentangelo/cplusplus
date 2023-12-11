@@ -6,6 +6,7 @@ using namespace std;
 string ltrim(const string &);
 string rtrim(const string &);
 vector<string> split(const string &);
+void setString (vector<string> &, vector<string> input);
 
 /*
  * Complete the 'similarStrings' function below.
@@ -16,8 +17,58 @@ vector<string> split(const string &);
  *  2. 2D_INTEGER_ARRAY queries
  */
 
-vector<int> similarStrings(int n, vector<vector<int>> queries) {
+vector<int> similarStrings(int n, vector<vector<int>> queries, vector<string> stringS) {
 
+    vector<int> returnNumbers(queries.size());
+
+
+    for (size_t i = 0; i < queries.size(); i++)
+    {
+        int startStrIndex = queries[i][0] -1;
+        int subStrLen = queries[i][1] - queries[i][0] == 0 ? 1 : queries[i][1] - queries[i][0] + 1;
+        string sSubstring = stringS[0].substr(startStrIndex, subStrLen);
+        int subStringSize = sSubstring.size();
+
+        int similarCount = 0;
+        for (size_t j = 0; j < stringS[0].size() - subStringSize + 1; j++)
+        {
+            string testSubstring = stringS[0].substr(j, subStringSize);
+
+            bool isSimilar = true;
+            for (size_t k = 0; k < subStringSize; k++)
+            {
+                for (size_t l = 0; l < subStringSize; l++)
+                {
+                    bool isMatchSsubstring = sSubstring[k] == sSubstring[l];
+                    bool isMatchTestString = testSubstring[k] == testSubstring[l];
+                    if (isMatchSsubstring != isMatchTestString)
+                    {
+                        isSimilar = false;
+                        break;
+                    }
+                }
+                if(!isSimilar)
+                {
+                    break;
+                }
+            }
+
+            if(isSimilar)
+            {
+                similarCount += 1;
+            }
+            
+            
+        }
+        returnNumbers[i] = similarCount;
+    }
+    
+    return returnNumbers;
+}
+
+void setString (vector<string> &output, vector<string> input)
+{
+    output = input;
 }
 
 int main()
@@ -35,6 +86,10 @@ int main()
 
     vector<vector<int>> queries(q);
 
+    string stringS_row_temp_temp;
+    getline(cin, stringS_row_temp_temp);
+    vector<string> stringS = split(rtrim(stringS_row_temp_temp));
+
     for (int i = 0; i < q; i++) {
         queries[i].resize(2);
 
@@ -50,7 +105,7 @@ int main()
         }
     }
 
-    vector<int> result = similarStrings(n, queries);
+    vector<int> result = similarStrings(n, queries, stringS);
 
     for (size_t i = 0; i < result.size(); i++) {
         fout << result[i];
