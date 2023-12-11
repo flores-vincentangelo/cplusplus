@@ -1,9 +1,11 @@
 #include <bits/stdc++.h>
+#include <stdio.h>
 
 using namespace std;
 
 string ltrim(const string &);
 string rtrim(const string &);
+int longestPalindrome(string s);
 
 /*
  * Complete the 'circularPalindromes' function below.
@@ -13,8 +15,70 @@ string rtrim(const string &);
  */
 
 vector<int> circularPalindromes(string s) {
+    
+    int sSize = s.size();
+    vector<int> returnNumbers (sSize);
 
+    for (size_t i = 0; i < sSize; i++)
+    {
+        string palidromicSubString;
+
+        if(i == 0)
+        {
+            palidromicSubString = s;
+        }
+        else
+        {
+            string palindromicStringEnd = s.substr(0,i);
+            string palindromicStringStart = s.substr(i);
+            palidromicSubString = palindromicStringStart + palindromicStringEnd;
+        }
+
+        returnNumbers[i] = longestPalindrome(palidromicSubString);
+        cout << endl;
+        cout << returnNumbers[i];
+    }
+    
+
+    return returnNumbers;
 }
+
+int longestPalindrome(string s)
+{
+    int longestPalindromeLength = 0;
+
+    for (size_t length = 0; length < s.size(); length++)
+    {
+
+        for (size_t i = 0; i < s.size() - i + 1; i++)
+        {
+            string testPalindrome = s.substr(i, length);
+            bool isPalindrome = true;
+            for (size_t j = 0; j < testPalindrome.size(); j++)
+            {
+                if (testPalindrome[j] != testPalindrome[testPalindrome.size() - 1 -j])
+                {
+                    isPalindrome = false;
+                    break;
+                }
+            }
+
+            if(!isPalindrome)
+            {
+                continue;
+            }
+            else
+            {
+                longestPalindromeLength = longestPalindromeLength > testPalindrome.size() ? longestPalindromeLength : testPalindrome.size();
+            }
+            
+        }
+        
+    }
+    
+    return longestPalindromeLength;
+}
+
 
 int main()
 {
